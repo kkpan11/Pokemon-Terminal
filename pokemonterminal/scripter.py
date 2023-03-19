@@ -1,65 +1,94 @@
 # Used for creating, running and analyzing applescript and bash scripts.
-
-import os
 import sys
-import subprocess
 
-from pokemonterminal.adapter import identify
+from .terminal import get_current_terminal_adapters
+from .wallpaper import get_current_wallpaper_adapters
 
-
-osa_script_fmt = """tell application "System Events"
-\ttell current desktop
-\t\tset picture to "{}"
-\tend tell
-end tell"""
+TERMINAL_PROVIDER = None
+WALLPAPER_PROVIDER = None
 
 
-def __run_osascript(stream):
-    p = subprocess.Popen(['osascript'], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-    p.stdin.write(stream)
-    p.communicate()
-    p.stdin.close()
-
-
-def __linux_create_wallpaper_script(image_file_path):
-    # If its gnome... aka GDMSESSION=gnome-xorg, etc.
-    if "gnome" in os.environ.get("GDMSESSION"):
-        fmt = 'gsettings set org.gnome.desktop.background picture-uri "file://{}"'
-        return fmt.format(image_file_path)
-    # elif condition of KDE...
+def __init_terminal_provider():
+    global TERMINAL_PROVIDER
+    if TERMINAL_PROVIDER is not None:
+        return
+    providers = get_current_terminal_adapters()
+    if len(providers) > 1:
+        # All this if is really not supposed to happen at all whatsoever
+        # really what kind of person has 2 simultaneous T.E???
+        print("Multiple providers found, please select the appropriate one.")
+        for i, x in enumerate(providers):
+            print(f'{i}. {x.__str__()}')
+        print("If some of these make no sense or are irrelevant please file " +
+              "an issue in https://github.com/LazoCoder/Pokemon-Terminal")
+        print("=> ", end='')
+        inp = None
+        while inp is None:
+            try:
+                inp = int(input())
+                if inp >= len(providers):
+                    raise ValueError()
+            except ValueError as _:
+                print("Invalid number, try again!")
+        TERMINAL_PROVIDER = providers[inp]
+    elif len(providers) <= 0:
+        print("Your terminal emulator isn't supported at this time.")
+        sys.exit()
     else:
-        print("Window manager not supported ")
-        exit(1)
+        TERMINAL_PROVIDER = providers[0]
+
+
+def __init_wallpaper_provider():
+    global WALLPAPER_PROVIDER
+    if WALLPAPER_PROVIDER is not None:
+        return
+    providers = get_current_wallpaper_adapters()
+    if len(providers) > 1:
+        # All this if is really not supposed to happen at all whatsoever
+        # really what kind of person has 2 simultaneous D.E???
+        print("Multiple providers found, please select the appropriate one.")
+        for i, x in enumerate(providers):
+            print(f'{i}. {x.__str__()}')
+        print("If some of these make no sense or are irrelevant please file " +
+              "an issue in https://github.com/LazoCoder/Pokemon-Terminal")
+        print("=> ", end='')
+        inp = None
+        while inp is None:
+            try:
+                inp = int(input())
+                if inp >= len(providers):
+                    raise ValueError()
+            except ValueError as _:
+                print("Invalid number, try again!")
+        WALLPAPER_PROVIDER = providers[inp]
+    elif len(providers) <= 0:
+        print("Your desktop environment isn't supported at this time.")
+        sys.exit()
+    else:
+        WALLPAPER_PROVIDER = providers[0]
 
 
 def clear_terminal():
-    adapter = identify()
-    adapter.clear()
+    __init_terminal_provider()
+    TERMINAL_PROVIDER.clear()
 
 
 def change_terminal(image_file_path):
     if not isinstance(image_file_path, str):
         print("A image path must be passed to the change terminal function.")
         return
-    adapter = identify()
-    if adapter is None:
-        print("Terminal not supported")
-    adapter.set_image_file_path(image_file_path)
-
-
-def get_terminal_background_number():
-    adapter = identify()
-    if adapter is None:
-        print("Terminal not supported")
-    return adapter.get_image_file_number()
+    __init_terminal_provider()
+    TERMINAL_PROVIDER.change_terminal(image_file_path)
 
 
 def change_wallpaper(image_file_path):
     if not isinstance(image_file_path, str):
         print("A image path must be passed to the change wallpapper function.")
         return
-    if sys.platform == "darwin":
-        script = osa_script_fmt.format(image_file_path)
-        __run_osascript(str.encode(script))
-    elif sys.platform == "linux":
-        os.system(__linux_create_wallpaper_script(image_file_path))
+    __init_wallpaper_provider()
+    WALLPAPER_PROVIDER.change_wallpaper(image_file_path)
+
+
+def get_terminal_background_number():
+    __init_terminal_provider()
+    return TERMINAL_PROVIDER.get_image_file_number()

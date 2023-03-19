@@ -1,338 +1,130 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/env python3.7
 """The main module that brings everything together."""
 
+import os
 import random
 import sys
-import time
+from multiprocessing import Process
+from pathlib import Path
 
-from pokemonterminal import scripter
+from . import scripter, slideshow
+from pokemonterminal.command_flags import parser, is_slideshow
 from pokemonterminal.database import Database
+from pokemonterminal.filters import Filter
+from pokemonterminal.platform import PlatformNamedEvent
 
 
-def print_list(list_of_items):
-    """Print all the items in a list. Used for printing each Pokemon from a particular region."""
-    print("\n".join(str(item) for item in list_of_items))
 
-
-def print_columns(items):
-    """Print a list as multiple columns instead of just one."""
-    rows = []
-    items_per_column = int(len(items) / 4) + 1
-    for index, pokemon in enumerate(items):
-        name = pokemon.get_id() + " " + pokemon.get_name().title()
-        name = name.ljust(20)
-        if len(rows) < items_per_column:
-            rows.append(name)
-        else:
-            rows[index % items_per_column] += name
-    print_list(rows)
-
-
-def print_types(items):
-    print("All existent pokemon types are:\n" + ", ".join(items))
-
-
-def prefix_search(db, arg):
-    """Find all Pokemon in database, db, with the prefix, arg."""
-    result = db.names_with_prefix(arg)
-    if len(result) == 0:
-        print("No Pokemon found with prefix '" + arg + "'.")
-    else:
-        print_columns(result)
-
-
-def print_extra(db):
-    """Print all the 'Extra' Pokemon from the 'Extra' folder."""
-    result = db.get_extra()
-    if len(result) == 0:
-        print("No Pokemon were found in Images/Extra.")
-    else:
-        print_columns(result)
-
-
-def print_usage():
-    """Print the instructions of usage."""
-    print(
-        '''
-Usage:
-    pokemon [parameter]
-    ichooseyou [parameter]
-
-Parameters:
-    [name]        -   Change the terminal background to the specified Pokemon.
-    [index]       -   Change the terminal background to a Pokemon by its index.
-    [region]      -   List all the Pokemon of the specified region.
-    [one letter]  -   List all Pokemon who's names begin with a particular letter.
-    [two letters] -   List all Pokemon who's names begin with those two letters.
-
-Other Parameters:
-    all                           -   List all the Pokemon supported.
-    regions                       -   List all the available regions.
-    extra                         -   List all the Pokemon from the 'Extra' folder.
-    random                        -   Change the terminal background to a random Pokemon.
-    random-<region>               -   Change the terminal background to a random Pokemon from the specified region.
-    slideshow [time]              -   Iterate through each Pokemon. Optional time (in seconds) between Pokemon.
-    slideshow-<region> [time]     -   Iterate through each Pokemon in the specified region. Optional time (in seconds) between Pokemon.
-    rnd-slideshow [time]          -   Iterate through each Pokemon in a random order. Optional time (in seconds) between Pokemon.
-    rnd-slideshow-<region> [time] -   Iterate through each Pokemon in the specified region in a random order. Optional time (in seconds) between Pokemon.
-    light                         -   Change the terminal background to a random light-colored Pokemon.
-    dark                          -   Change the terminal background to a random dark-colored Pokemon.
-    type [type]                   -   Random pokemon of [type] omit the type for a list of types.
-    clear | disable | off         -   Clear the Pokemon in the terminal.
-    help                          -   Display this menu.
-
-Wallpaper Parameters:
-    pokemon _pikachu               -   Change the wallpaper to the specified Pokemon.
-    pokemon _random                -   Change the wallpaper to a random Pokemon.
-    pokemon _random-kanto          -   Change the wallpaper to a random Pokemon from the specified region.
-
-Search System Information:
-    Any input containing 3 or more characters triggers the internal search system. Examples:
-    "pokemon pika" changes the terminal background to Pikachu.
-    "pokemon dos"  changes the terminal background to Gyarados.
-''')
-
-
-def slideshow(db, start, end, seconds="0.25", rand=False):
-    delay = 0.25
-    if seconds is not None:
-        delay = float(seconds)
-
-    # Show each Pokemon, one by one.
-    r = list(range(start, end))
-    if rand:
-        random.shuffle(r)
+def main(argv=None):
+    """Entrance to the program."""
+    if __name__ != "__main__":
+        Filter.filtered_list = [pok for pok in Filter.POKEMON_LIST]
+    # TODO Lower main() complexity with factory functions or something
+    options = parser.parse_args(argv)  # Parser is imported at top of file.
     try:
-        for x in r:
-            pokemon = db.get_pokemon(x)
-            scripter.change_terminal(pokemon.get_path())
-            time.sleep(delay)
-    except KeyboardInterrupt:
-        print("Program was terminated.")
-        sys.exit()
+        options.id = int(options.id)
+    except ValueError:
+        options.name = options.id.lower()
+        options.id = 0
+        Filter.filtered_list = [
+            x for x in Filter.filtered_list if options.name == x.get_name()
+        ]
 
+    size = len(Filter.filtered_list)
+    if size == 0:
+        print("No pokemon matches the specified filters")
+        return
 
-def change_terminal_background(db, arg):  # arg is a pokemon_name
-    """Change the terminal background to the specified Pokemon, if it exists."""
-    if arg in db:
-        pokemon = db.get_pokemon(arg)
-        scripter.change_terminal(pokemon.get_path())
-    else:  # If not found in the database, try to give suggestions.
-        suggestions = db.names_with_infix(arg)
-        if len(suggestions) == 0:
-            print("No such Pokemon was found and no suggestions are available.")
+    if options.id <= 0:
+        # TODO this doesn't account for the current set pokemon and might try
+        # TODO to set the same pokemon again (essentially not doing anything)
+        target = random.choice(Filter.filtered_list)
+    else:
+        options.id -= 1
+        if len(Filter.POKEMON_LIST) > options.id:
+            if len(sys.argv) > 2:
+                print("ID has been specified, ignoring all filters.")
+            size = 1
+            target = Filter.POKEMON_LIST[options.id]
+            Filter.filtered_list = [target]
         else:
-            pokemon = suggestions[0]
-            scripter.change_terminal(pokemon.get_path())
-            print("Did you mean {}?".format(pokemon.get_name().title()))
-            if len(suggestions) > 1:
-                print("Other suggestions:")
-                print_columns(suggestions[1:])
+            print("Invalid id specified")
+            return
 
+    if options.verbose or options.dry_run:
+        if size == 1:
+            print('A single pokemon matches the specified criteria: ')
+        if size > Database.MAX_ID:
+            print('No pokemon has been filtered...')
+        else:
+            # Print the list of filtered pokemon
+            [
+                print(f"#{pkmn.get_id()} - {pkmn.get_name().title()}")
+                for pkmn in Filter.filtered_list
+            ]
+        print("Total of %d pokemon matched the filters. Chose %s" %
+              (size, target.get_name().title()))
 
-def get_terminal_background_name(db):
-    """Gets the number of the Pokemon currently set as the terminal background"""
-    pokemon_number = scripter.get_terminal_background_number()
-    if isinstance(pokemon_number, (int, str)):
-        if isinstance(pokemon_number, int) or pokemon_number.isdigit():
-            if pokemon_number != 0:
-                print(db.get_pokemon(pokemon_number).get_name().capitalize())
-            else:
-                print("None")
-        elif isinstance(pokemon_number, str):
-            print(pokemon_number.replace('-', ' ').capitalize())
+    if options.dry_run:
+        print("Dry run, exiting.")
+        return
+
+    if options.filepath:
+        print(target.get_path())
+        return
+
+    event_name = "Pokemon-Terminal_Wallpaper" if options.wallpaper else "Pokemon-Terminal_Terminal"
+    event_exists = PlatformNamedEvent.exists(event_name)
+
+    if options.clear:
+        if event_exists:
+            slideshow.stop(event_name)
+        if not options.wallpaper:
+            scripter.clear_terminal()
+        return
+
+    if options.show_current:
+        pokemon_number = scripter.get_terminal_background_number()
+        if pokemon_number != 0:
+            print(Database().get_pokemon(pokemon_number).get_name().capitalize())
         else:
             print("None")
-    else:
-        print("Not yet implemented")
-
-
-def change_wallpaper(db, arg):  # arg is a pokemon_name
-    """Change the wallpaper to the specified Pokemon, if it exists."""
-    if arg in db:
-        pokemon = db.get_pokemon(arg)
-        scripter.change_wallpaper(pokemon.get_path())
-    else:  # If not found in the database, try to give suggestions.
-        suggestions = db.names_with_infix(arg)
-        if len(suggestions) == 0:
-            print("No such Pokemon was found and no suggestions are available.")
-        else:
-            pokemon = suggestions[0]
-            scripter.change_wallpaper(pokemon.get_path())
-            print("Did you mean {}?".format(pokemon.get_name().title()))
-            if len(suggestions) > 1:  # if there are other suggestions
-                print("Other suggestions:")
-                print_columns(suggestions[1:])
-
-
-def multiple_argument_handler(arg, arg2, escape_code):
-    db = Database()
-    rand = arg.startswith("rnd")
-    if "slideshow" in arg:
-        try:
-            if arg.endswith("slideshow"):
-                slideshow(db, 1, 494, arg2, rand)
-            elif arg.endswith("slideshow-kanto"):
-                slideshow(db, 1, 152, arg2, rand)
-            elif arg.endswith("slideshow-johto"):
-                slideshow(db, 152, 252, arg2, rand)
-            elif arg.endswith("slideshow-hoenn"):
-                slideshow(db, 252, 387, arg2, rand)
-            elif arg.endswith("slideshow-sinnoh"):
-                slideshow(db, 387, 494, arg2, rand)
-            elif arg.endswith("slideshow-unova"):
-                slideshow(db, 494, 650, arg2, rand)
-            elif arg.endswith("slideshow-kalos"):
-                slideshow(db, 650, 720, arg2, rand)
-            else:
-                print('Invalid slideshow command specified.'
-                      '\nType "help" to see all the commands.')
-        except ValueError:
-            print('The slideshow time needs to be a positive number'
-                  '\nType "help" to see all the commands.')
-    elif arg.lower() == 'type':
-        arg2 = arg2.lower()
-        if arg2 not in db.get_pokemon_types():
-            print("Invalid type specified")
-        else:
-            target = db.get_pokemon_of_type(arg2).get_name()
-            if escape_code:
-                change_wallpaper(db, target)
-            else:
-                change_terminal_background(db, target)
-    else:
-        print('Invalid command specified.'
-              '\nType "help" to see all the commands.')
-
-
-def single_argument_handler(arg, escape_code):
-    """Handle the logic for when there is only one command line parameter inputted."""
-    db = Database()
-
-    if len(arg) < 3 and arg.isalpha():
-        prefix_search(db, arg)
-    elif arg == "extra":
-        print_extra(db)
-    elif arg == "regions":
-        print_list(db.get_regions())
-    elif arg == "help" or arg.startswith("-h"):
-        print_usage()
-    elif arg == "kanto":
-        print_columns(db.get_kanto())
-    elif arg == "johto":
-        print_columns(db.get_johto())
-    elif arg == "hoenn":
-        print_columns(db.get_hoenn())
-    elif arg == "sinnoh":
-        print_columns(db.get_sinnoh())
-    elif arg == "unova":
-        print_columns(db.get_unova())
-    elif arg == "kalos":
-        print_columns(db.get_kalos())
-    elif arg == "all":
-        print_columns(db.get_all())
-    elif arg in ("clear", "disable", "off"):
-        scripter.clear_terminal()
-    elif arg == "random" and escape_code:
-        change_wallpaper(db, db.get_random())
-    elif arg == "random-kanto" and escape_code:
-        change_wallpaper(db, db.get_random_from_region("kanto"))
-    elif arg == "random-johto" and escape_code:
-        change_wallpaper(db, db.get_random_from_region("johto"))
-    elif arg == "random-hoenn" and escape_code:
-        change_wallpaper(db, db.get_random_from_region("hoenn"))
-    elif arg == "random-sinnoh" and escape_code:
-        change_wallpaper(db, db.get_random_from_region("sinnoh"))
-    elif arg == "random-unova" and escape_code:
-        change_wallpaper(db, db.get_random_from_region("unova"))
-    elif arg == "random-kalos" and escape_code:
-        change_wallpaper(db, db.get_random_from_region("kalos"))
-    elif arg == "random":
-        change_terminal_background(db, db.get_random())
-    elif arg == "random-kanto":
-        change_terminal_background(db, db.get_random_from_region("kanto"))
-    elif arg == "random-johto":
-        change_terminal_background(db, db.get_random_from_region("johto"))
-    elif arg == "random-hoenn":
-        change_terminal_background(db, db.get_random_from_region("hoenn"))
-    elif arg == "random-sinnoh":
-        change_terminal_background(db, db.get_random_from_region("sinnoh"))
-    elif arg == "random-unova":
-        change_terminal_background(db, db.get_random_from_region("unova"))
-    elif arg == "random-kalos":
-        change_terminal_background(db, db.get_random_from_region("kalos"))
-    elif arg == "light" and escape_code:
-        change_wallpaper(db, db.get_light())
-    elif arg == "dark" and escape_code:
-        change_wallpaper(db, db.get_dark())
-    elif arg == "light":
-        change_terminal_background(db, db.get_light())
-    elif arg == "dark":
-        change_terminal_background(db, db.get_dark())
-    elif arg in ("type", "types"):
-        print_types(db.get_pokemon_types())
-    elif arg == "slideshow":
-        slideshow(db, 1, 494)
-    elif arg == "slideshow-kanto":
-        slideshow(db, 1, 152)
-    elif arg == "slideshow-johto":
-        slideshow(db, 152, 252)
-    elif arg == "slideshow-hoenn":
-        slideshow(db, 252, 387)
-    elif arg == "slideshow-sinnoh":
-        slideshow(db, 387, 494)
-    elif arg == "slideshow-unova":
-        slideshow(db, 494, 650)
-    elif arg == "slideshow-kalos":
-        slideshow(db, 650, 720)
-    elif arg.endswith("slideshow"):
-        slideshow(db, 1, 494, rand=arg.startswith("rnd"))
-    elif arg.endswith("slideshow-kanto"):
-        slideshow(db, 1, 152, rand=arg.startswith("rnd"))
-    elif arg.endswith("slideshow-johto"):
-        slideshow(db, 152, 252, rand=arg.startswith("rnd"))
-    elif arg.endswith("slideshow-hoenn"):
-        slideshow(db, 252, 387, rand=arg.startswith("rnd"))
-    elif arg.endswith("slideshow-sinnoh"):
-        slideshow(db, 387, 494, rand=arg.startswith("rnd"))
-    elif arg.endswith("slideshow-unova"):
-        slideshow(db, 494, 650, rand=arg.startswith("rnd"))
-    elif arg.endswith("slideshow-kalos"):
-        slideshow(db, 650, 720, rand=arg.startswith("rnd"))
-    elif arg == "current":
-        get_terminal_background_name(db)
-    elif arg == "?":
-        get_terminal_background_name(db)
-    elif escape_code:
-        change_wallpaper(db, arg)
-    else:
-        change_terminal_background(db, arg)
-
-
-def main(argv=sys.argv):
-    """Entrance to the program."""
-    if len(argv) == 1:
-        print('No command line arguments specified.'
-              '\nTry typing in a Pokemon name or number.'
-              '\nOr type "help" to see all the commands.')
         return
-    # If there is an escape code, then change the wallpaper, not the terminal.
-    if str(argv[1]).startswith("_"):
-        ESCAPE_CODE = True
-        argv[1] = argv[1][1:]
-    else:
-        ESCAPE_CODE = False
 
-    if len(argv) == 2:
-        single_argument_handler(argv[1].lower(), ESCAPE_CODE)
-    elif len(argv) == 3:
-        multiple_argument_handler(argv[1].lower(), argv[2], ESCAPE_CODE)
+    if is_slideshow and options.id <= 0 and size > 1:
+        if options.slideshow <= 0:
+            print("Time has to be greater than 0. You can use decimal values.")
+            return
+        if event_exists:
+            print("One or more slideshows is already running.\n")
+            while True:
+                print("[S]top the previous slideshow(s) / ", end='')
+                if not options.wallpaper:
+                    print("[I]gnore and continue / ", end='')
+                print("[A]bort")
+                inp = input("Pick one: ").lower()
+                if inp == 's':
+                    slideshow.stop(event_name)
+                    break
+                elif inp == 'i' and not options.wallpaper:
+                    break
+                elif inp == 'a':
+                    return
+                else:
+                    print("Not a valid option!\n")
+        target_func = scripter.change_wallpaper if options.wallpaper else scripter.change_terminal
+        print(f"Starting slideshow with {len(Filter.filtered_list)} Pokemons and a delay of {options.slideshow} minutes.")
+        pid = slideshow.start(Filter.filtered_list, options.slideshow, target_func, event_name)
+        print(f"Forked process to background with PID {pid}.")
+        print("You can stop it with 'pokemon {}'.".format('-c -w' if options.wallpaper else '-c'))
+        return
+
+    if options.wallpaper:
+        scripter.change_wallpaper(target.get_path())
     else:
-        print('Invalid number of arguments.'
-              '\nType "help" to see all the commands.')
+        scripter.change_terminal(target.get_path())
 
 
 if __name__ == "__main__":
     # Entrance to the program.
-    main(sys.argv)
+    main(sys.argv[1:])

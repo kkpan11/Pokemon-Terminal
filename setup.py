@@ -1,6 +1,5 @@
-#/usr/bin/env python3
-
-
+#!/usr/bin/env python3
+import sys
 import os
 from setuptools import setup, find_packages
 
@@ -28,17 +27,17 @@ def package_data(relpath, folders):
 
 setup(
     name="pokemon-terminal",
-    version="0.0.1",
+    version="1.3.0",  # Copied from package.json
 
     description="Pokemon terminal themes.",
     long_description="""
 Pokemon Terminal Themes.
 
-493 unique Pokemon.
-from Kanto, Johto, Hoenn and Sinnoh.
+719 unique Pokemon.
+from Kanto, Johto, Hoenn, Sinnoh, Unova, and Kalos.
 
 Change the Terminal Background & Desktop Wallpaper.
-Supports ITerm2, Terminology & Tilix.""",
+Supports iTerm2, Terminology, Tilix and ConEmu.""",
     url="https://github.com/LazoCoder/Pokemon-Terminal",
 
     author="LazoCoder",
@@ -52,10 +51,10 @@ Supports ITerm2, Terminology & Tilix.""",
         "pokemonterminal": package_data("pokemonterminal", ["Data", "Images"]),
     },
 
-    entry_points={
-        "console_scripts": [
-            "pokemon=pokemonterminal.main:main",
-            "ichooseyou=pokemonterminal.main:main",
+    entry_points = {
+        'console_scripts': [
+            'pokemon = pokemonterminal.main:main',
+            'ichooseyou = pokemonterminal.main:main',
         ],
     },
 
@@ -71,9 +70,9 @@ Supports ITerm2, Terminology & Tilix.""",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
 
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7"
     ],
 
-    python_requires=">=3.5"
+    python_requires=">=3.7",
+    install_requires=(["psutil"] if sys.platform != "win32" else None)
 )
