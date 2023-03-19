@@ -117,6 +117,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -c, --clear           Clears the current pokemon from terminal background
                         and quits.
+  -s, --show-current    show the name of the current pokemon
 
 Filters:
   Arguments used to filter the list of pokemons with various conditions that

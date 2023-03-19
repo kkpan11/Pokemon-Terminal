@@ -114,3 +114,8 @@ either.add_argument(
     ' name',
     nargs='?',
     default=0, const=0)
+either.add_argument(
+    '-sc',
+    '--show-current',
+    help='Show the name of the current pokemon',
+    action='store_true')

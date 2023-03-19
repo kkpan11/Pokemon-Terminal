@@ -83,6 +83,14 @@ def main(argv=None):
             scripter.clear_terminal()
         return
 
+    if options.show_current:
+        pokemon_number = scripter.get_terminal_background_number()
+        if pokemon_number != 0:
+            print(Database().get_pokemon(pokemon_number).get_name().capitalize())
+        else:
+            print("None")
+        return
+
     if is_slideshow and options.id <= 0 and size > 1:
         if options.slideshow <= 0:
             print("Time has to be greater than 0. You can use decimal values.")

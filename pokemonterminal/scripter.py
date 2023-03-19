@@ -87,3 +87,8 @@ def change_wallpaper(image_file_path):
         return
     __init_wallpaper_provider()
     WALLPAPER_PROVIDER.change_wallpaper(image_file_path)
+
+
+def get_terminal_background_number():
+    __init_terminal_provider()
+    return TERMINAL_PROVIDER.get_image_file_number()
