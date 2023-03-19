@@ -65,7 +65,9 @@ You can then proceed with one of the following methods for installation:
 
 Linux users: Your distro might include `pip` in a different package than Python, make sure to have that installed.
 
-Run `pip3 install git+https://github.com/LazoCoder/Pokemon-Terminal.git`.
+Run `pip3 install git+https://github.com/kkpan11/Pokemon-Terminal.git`.
+
+Or you can install locally when you add some modifications with `pip3 install .` at the root of the repo.
 
 If you want a system-wide install, run the command as superuser or administrator.
 
