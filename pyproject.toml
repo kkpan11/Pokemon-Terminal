@@ -1,0 +1,56 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# Poetry
+[tool.poetry]
+name = "pokemon-terminal"
+version = "1.3.0" # Copied from package.json
+description = "Pokemon terminal themes."
+
+license = "GPL-3.0-only"
+
+authors = [
+    "LazoCoder"
+]
+
+repository = "https://github.com/LazoCoder/Pokemon-Terminal"
+
+## README file(s) are used as the package description
+readme = ["README.md", "LICENSE"]
+
+packages = [
+    { include = "pokemonterminal", from = "src" }
+]
+
+## Keywords (translated to tags on the package index)
+keywords = ["pokemon", "terminal", "theme", "style", "pokemon-terminal"]
+
+## Classifiers (these standardized classifiers can then be used by community members to find projects based on their desired criteria)
+classifiers = [
+    "Development Status :: 3 - Alpha",
+
+    "Intended Audience :: End Users/Desktop",
+    "Environment :: Console",
+    "Topic :: Utilities",
+
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7"
+]
+
+[tool.poetry.dependencies]
+## Compatible Python versions
+python = ">=3.7"
+## Standard dependency with semver constraints
+typing = "*"
+luaparser = "*"
+Pillow = "*"
+colorthief = "*"
+psutil = "*"
+
+## Python-style entrypoints and scripts are easily expressed
+[tool.poetry.scripts]
+pokemon = { callable = "pokemonterminal.main:main" }
+ichooseyou = { callable = "pokemonterminal.main:main" }

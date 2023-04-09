@@ -81,6 +81,16 @@ You might want to add the following directories to your `PATH` on a per-user ins
 
 When the command completes, it's installed and ready to go!
 
+## poetry
+
+After I migrated the `setup.py` to `pyproject.toml` mechanism with `poetry` settings.
+
+So you also have the way to install/build with it.
+
+Obviously requires to have [Poetry](https://python-poetry.org/) installed.
+
+Then just run `poetry install` or `poetry build` at the root of the repo to develop or test.
+
 ## npm
 
 Obviously requires to have [Node.js](https://nodejs.org/) installed.
