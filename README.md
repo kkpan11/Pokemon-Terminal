@@ -175,6 +175,10 @@ Example:
 
 ## iTerm2 settings
 
+You can choose one of two ways:
+
+**1. Fixed Profile Setting (Manually)**
+
 I highly suggest making the font colors black and the terminal window transparent. Some of the images have both light and dark colours and so it can be difficult to see the text sometimes. Transparency resolves this issue. Since *Pokemon-Terminal* only changes the background, the transparency must be done manually:
 
 1. Navigate to iTerm2 > Preferences > Profiles > Window
@@ -188,6 +192,21 @@ I highly suggest making the font colors black and the terminal window transparen
 The result should look like this:
 
 ![](https://i.imgur.com/82DAT97.jpg)
+
+**2. Generated Dynamic Profile (Dynamically)**
+
+Because the `pokemon` command will choose an image randomly, so the fixed configuration method would not be work on all situations.
+
+Fortunately, `iTerm2` provide a **Dynamic Profile** function that can let us to load different generated profiles.
+
+Use the [iterm-theme-generator](https://github.com/m4yers/iterm-theme-generator) tool to generate iTerm2 colors based on an image can achive our purpose.
+
+Configurations:
+1. run install command in iTerm2: `$ pip install --upgrade iterm-theme-generator`
+2. run pokemon command in iTerm2 `$ pokemon`. This will trigger generating dynamic profile after the background image change. This color theme profile will inherit the default profile from your `iTerm2` settings.
+3. Go to the profiles tab and select this new profile as default and restart iTerm. Now, when you update background image with command `$ pokemon`, iTerm will load it dynamically, so no need to restart again.
+
+![](https://i.imgur.com/p4vLydd.png)
 
 ## ConEmu settings
 
