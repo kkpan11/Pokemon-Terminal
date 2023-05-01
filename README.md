@@ -3,31 +3,31 @@
 [![Build Status](https://travis-ci.org/LazoCoder/Pokemon-Terminal.svg?branch=master)](https://travis-ci.org/LazoCoder/Pokemon-Terminal)
 
 <p align="center">
-    <img src="https://i.imgur.com/n34fXyp.png" width="700"/> <!--Pikachu-->
-    <img src="https://i.imgur.com/bLajJfw.png" width="430"/> <!--Bulbasaur-->
-    <img src="https://i.imgur.com/ZzQhJuE.png" width="430"/> <!--Squirtle-->
-    <img src="https://i.imgur.com/54fvKOQ.png" width="430"/> <!--Charizard-->
-    <img src="https://i.imgur.com/xaHPMUd.png" width="430"/> <!--Eevee-->
-    <img src="https://i.imgur.com/W41EHr2.png" width="430"/> <!--Clefairy-->
-    <img src="https://i.imgur.com/QjqQ6QQ.png" width="430"/> <!--Magikarp-->
-    <img src="https://i.imgur.com/K7G2VW4.png" width="430"/> <!--Machop-->
-    <img src="https://i.imgur.com/3z1WtCu.png" width="430"/> <!--Slowpoke-->
-    <img src="https://i.imgur.com/u8cYbFp.png" width="430"/> <!--Muk-->
-    <img src="https://i.imgur.com/54Ehhnk.png" width="430"/> <!--Porygon-->
-    <img src="https://i.imgur.com/XEOwCXr.png" width="430"/> <!--Chansey-->
-    <img src="https://i.imgur.com/smvCxHG.png" width="430"/> <!--Growlithe-->
-    <img src="https://i.imgur.com/ZR5h5dZ.png" width="430"/> <!--Scyther-->
-    <img src="https://i.imgur.com/I4TakUm.png" width="430"/> <!--Omanyte-->
-    <img src="https://i.imgur.com/165hq6O.png" width="430"/> <!--Corsola-->
-    <img src="https://i.imgur.com/H0AhgW5.png" width="430"/> <!--Mewtew-->
-    <img src="https://i.imgur.com/jF2DMqO.png" width="430"/> <!--Azumarill-->
-    <img src="https://i.imgur.com/G0LpD66.png" width="430"/> <!--Snubbull-->
-    <img src="https://i.imgur.com/zirtgZq.png" width="430"/> <!--Wobbuffet-->
-    <img src="https://i.imgur.com/O49I1gE.png" width="430"/> <!--Tyranitar-->
-    <img src="https://i.imgur.com/SCe91Uv.png" width="430"/> <!--Lugia-->
-    <img src="https://i.imgur.com/5vllDok.png" width="430"/> <!--Kyogre-->
-    <img src="https://i.imgur.com/3YSj8MB.png" width="430"/> <!--Rayquaza-->
-    <img src="https://i.imgur.com/YW5pSkZ.png" width="430"/> <!--Deoxys-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_n34fXyp.png" width="700"/> <!--Pikachu-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_bLajJfw.png" width="430"/> <!--Bulbasaur-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_ZzQhJuE.png" width="430"/> <!--Squirtle-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_54fvKOQ.png" width="430"/> <!--Charizard-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_xaHPMUd.png" width="430"/> <!--Eevee-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_W41EHr2.png" width="430"/> <!--Clefairy-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_QjqQ6QQ.png" width="430"/> <!--Magikarp-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_K7G2VW4.png" width="430"/> <!--Machop-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_3z1WtCu.png" width="430"/> <!--Slowpoke-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_u8cYbFp.png" width="430"/> <!--Muk-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_54Ehhnk.png" width="430"/> <!--Porygon-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_XEOwCXr.png" width="430"/> <!--Chansey-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_smvCxHG.png" width="430"/> <!--Growlithe-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_ZR5h5dZ.png" width="430"/> <!--Scyther-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_I4TakUm.png" width="430"/> <!--Omanyte-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_165hq6O.png" width="430"/> <!--Corsola-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_H0AhgW5.png" width="430"/> <!--Mewtew-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_jF2DMqO.png" width="430"/> <!--Azumarill-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_G0LpD66.png" width="430"/> <!--Snubbull-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_zirtgZq.png" width="430"/> <!--Wobbuffet-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_O49I1gE.png" width="430"/> <!--Tyranitar-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_SCe91Uv.png" width="430"/> <!--Lugia-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_5vllDok.png" width="430"/> <!--Kyogre-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_3YSj8MB.png" width="430"/> <!--Rayquaza-->
+    <img src="https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_YW5pSkZ.png" width="430"/> <!--Deoxys-->
     <!--<br><a href="https://imgur.com/a/0wfFm" target="_blank">More previews</a>-->
 </p>
 
@@ -169,7 +169,7 @@ Not setting any filters will get a completely random pokemon
 
 Example:
 
-![](https://i.imgur.com/DfA2lcd.gif)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_DfA2lcd.gif)
 
 # Tips, tricks and common issues
 
@@ -187,11 +187,11 @@ I highly suggest making the font colors black and the terminal window transparen
 4. Set the blur to maximum.
 5. Optionally you can set the blending to maximum to adjust the colors to look like the samples provided.
 
-![](https://i.imgur.com/xSZAGhL.png)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_xSZAGhL.png)
 
 The result should look like this:
 
-![](https://i.imgur.com/82DAT97.jpg)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_82DAT97.jpg)
 
 **2. Generated Dynamic Profile (Dynamically)**
 
@@ -206,7 +206,7 @@ Configurations:
 2. run pokemon command in iTerm2 `$ pokemon`. This will trigger generating dynamic profile after the background image change. This color theme profile will inherit the default profile from your `iTerm2` settings.
 3. Go to the profiles tab and select this new profile as default and restart iTerm. Now, when you update background image with command `$ pokemon`, iTerm will load it dynamically, so no need to restart again.
 
-![](https://i.imgur.com/p4vLydd.png)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_p4vLydd.png)
 
 ## ConEmu settings
 
@@ -228,7 +228,7 @@ You can, like in iTerm2, enable transparency. Simply press the down arrow in the
 
 The result should look like this:
 
-![](https://i.imgur.com/DZbiQHf.png)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_DZbiQHf.png)
 
 ## Adding Custom Images
 
@@ -238,12 +238,12 @@ $ pokemon -e -dr
 ```
 Alternatively, you can delete images from this folder and it will not break the program. These are some custom backgrounds:
 
-![](https://i.imgur.com/gdGUucu.gif)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_gdGUucu.gif)
 
 ## Solutions for Common Issues
 
 * If you experience a line at the top of the terminal after changing the Pokemon, you can remove it by typing in the `clear` command or opening a new terminal.
-![](https://i.imgur.com/5HMu1jD.png)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_5HMu1jD.png)
 
 * If you are using Tilix and the terminal background is not changing, try adjusting the transparency in your profile settings.
 * If you are experiencing issues with Terminology and are running on Ubuntu, make sure that you have installed the latest version:
@@ -263,14 +263,14 @@ To save a background you will need to setup a startup command in the profile:
    - Alternatively you can also type `pokemon` for a random theme each time you open up a new terminal.
 4. You can leave out `; clear` if you don't care about the line showing up at the top of the terminal.
 
-![](https://i.imgur.com/2d4qa9j.png)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_2d4qa9j.png)
 
 ### ConEmu
 After setting your desired pokemon, from the menu under the symbol at left of title bar, navigate to Settings > Main > Background and click Save Settings.
 
 ### Terminology
 Terminology already saves it automatically, just untick "temporary" in the settings after setting your desired Pokemon:
-![](http://i.imgur.com/BTqYXKa.png)
+![](https://raw.githubusercontent.com/kkpan11/Pokemon-Terminal/assets/imgur_BTqYXKa.png)
 
 To show a random Pokemon each session:
 1. Open `~/.bashrc` in your favorite text editor.
