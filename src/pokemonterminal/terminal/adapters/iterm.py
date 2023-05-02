@@ -49,7 +49,7 @@ class ItermProvider(_TProv):
     def __generate_color_theme_profile(path: str):
         stdin = ItermProvider.__osa_script_get_default_profile.format()
         profile = ItermProvider.__get_process(str.encode(stdin)).decode('utf-8').strip()
-        generate_profile_proc = subprocess.Popen(['iterm_theme_generator', path, '--parent', profile],
+        generate_profile_proc = subprocess.Popen(['iterm_theme_generator', path,'--parent', profile, '--blend', '1.0'],
                                                  stdout=subprocess.PIPE,
                                                  stdin=subprocess.PIPE,
                                                  stderr=subprocess.PIPE)
