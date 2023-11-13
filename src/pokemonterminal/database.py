@@ -267,10 +267,10 @@ class Database:
             return "sinnoh"
         elif identifier < 650:
             return "unova"
-        elif identifier < 720:
+        elif identifier < 722:
             return "kalos"
         else:
-            raise Exception("Pokemon ID cannot be greater than 719.")
+            raise Exception("Pokemon ID cannot be greater than 722.")
 
     def __determine_folder(self, identifier):
         # Determine which folder a Pokemon is from.
